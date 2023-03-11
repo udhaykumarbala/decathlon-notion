@@ -1,4 +1,8 @@
-<!DOCTYPE html>
+# loop through the folders in the directory
+import os
+
+
+htmlTemplateStart = """<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -218,22 +222,10 @@ body {
 <body>
   <!-- partial:index.partial.html -->
   <div class="slider">
-    <div class="slide current"></div>
-    <div class="slide"></div>
-    <div class="slide"></div>
-    <div class="slide"></div>
-    <div class="slide"></div>
-    <div class="slide"></div>
-    <div class="slide"></div>
-    <div class="slide"></div>
-    <div class="slide"></div>
-    <div class="slide"></div>
-    <div class="slide"></div>
-    <div class="slide"></div>
-    <div class="slide"></div>
-    <div class="slide"></div>
-    <div class="slide"></div>
-    <div class="slide"></div>
+    <div class="slide current"></div>"""
+    
+
+htmlTemplateEnd = """
 
     </div>
   <div class="buttons">
@@ -292,4 +284,29 @@ body {
 
 </body>
 
-</html>
+</html>"""
+for folder in os.listdir():
+    # check if the folder is a directory
+    if os.path.isdir(os.path.join(folder)):
+        # loop through the files in the folder
+        count = 0
+        for file in os.listdir(os.path.join(folder)):
+            # check if the file is a file
+            print(file)
+            if os.path.isfile(os.path.join(folder, file)):
+                # check if the file is a .txt file
+                if file.endswith('.png'):
+                    num = int(file.split('.')[0])
+                    print(num)
+                    if num > count:
+                        count = num
+                        print("count",count)
+        print("final",count)
+        # create a index.html file in the folder
+        with open(os.path.join(folder, 'index.html'), 'w') as f:
+            template = htmlTemplateStart
+            for i in range(1, count):
+                template += """
+    <div class="slide"></div>"""
+            template += htmlTemplateEnd
+            f.write(template)
